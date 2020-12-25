@@ -9,6 +9,6 @@ it('returns a 201 on successful signup', async () => {
       password: 'password'
     })
     
-  expect(res.statusCode).toEqual(500)
+  expect(res.statusCode).toEqual(201)
   expect(res.body.data).toHaveProperty('token')
 });
