@@ -59,7 +59,6 @@ const signIn = async (req, res) => {
       success: false,
       message: error.message
     })
-    // throw new Error(error.message)
   }
 }
 

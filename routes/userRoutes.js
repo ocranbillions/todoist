@@ -5,8 +5,6 @@ const validate = require("../middlewares/validate")
 
 const router = express.Router();
 
-const db = [];
-
 router.post("/signup",
   userValidationRules('signup'),
   validate,

@@ -1,17 +1,30 @@
 {
-  "name": "code",
+  "name": "todoist",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "jest --coverage --testTimeout=10000"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./test/setup.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "keywords": [],
-  "author": "",
+  "author": "Samuel Ocran",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "jest": "^26.6.3",
+    "mongodb-memory-server": "^6.9.2",
+    "nodemon": "^2.0.6",
+    "supertest": "^6.0.1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
