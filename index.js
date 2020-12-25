@@ -1,36 +1,31 @@
-const express = require("express");
-const bodyParser = require('body-parser')
-const todoRoutes = require("./routes/todoRoutes")
-const userRoutes = require("./routes/userRoutes")
+const app = require("./app");
+const mongoose = require("mongoose");
+require('dotenv').config();
+// require("./initDB");
 
-
-const app = express();
-app.use(bodyParser.json())
-
-app.use("/auth", userRoutes)
-app.use("/todo", todoRoutes)
-
-app.all('*', (req, res) => {
-  return res.status(404).json({
-    errors: [{message: "Page not found"}]
-  })
-})
-
-//Error handler
-app.use((error, req, res, next) => {
-  const env = process.env.NODE_ENV;
-  if (env === 'development' || env === 'test') {
-    return res.status(500).json({
-      errors: [{message: error.message}]
-    })
+const start = async () => {
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI must be defined');
+  }
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET must be defined');
   }
 
-  return res.status(500).json({
-    errors: [{message: "server error"}]
-  })
-});
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
+    console.log('Connected to MongoDb');
+  } catch (err) {
+    console.error(err);
+  }
+
+  app.listen(process.env.PORT || 3000, () => {
+    console.log(`Listening on port ${process.env.PORT}!!`);
+  });
+};
 
 
-app.listen(3000, () => {
-  console.log("app is listening on port 3000")
-})
+start();

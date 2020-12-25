@@ -7,17 +7,16 @@ const router = express.Router();
 
 const db = [];
 
-router.post("/signup", 
+router.post("/signup",
   userValidationRules('signup'),
   validate,
   signUp
 )
 
-router.post("/signin", 
+router.post("/signin",
   userValidationRules('signin'),
   validate,
   signIn
 )
-
 
 module.exports = router;

@@ -5,11 +5,12 @@ const validate = (req, res, next) => {
   if (errors.isEmpty()) {
     return next()
   }
-  const fieldsWithErrors = []
-  errors.array().map(err => fieldsWithErrors.push({ [err.param]: err.msg }))
+  const cleanedErrorObjects = []
+  errors.array().map(err => cleanedErrorObjects.push({ [err.param]: err.msg }))
 
   return res.status(400).json({
-    errors: fieldsWithErrors,
+    success: false,
+    errors: cleanedErrorObjects,
   })
 }
 
