@@ -3,11 +3,13 @@ const validationRules = require("../middlewares/validationRules")
 const validate = require("../middlewares/validate")
 const isLoggedIn = require("../middlewares/authorization")
 const {
-    createTodo,
-    editTodo,
-    deleteTodo,
-    fetchTodo,
-    fetchAll
+  createTodo,
+  editTodo,
+  deleteTodo,
+  fetchTodo,
+  fetchAll,
+  inviteFriend,
+  fetchFriendsTodos
 } = require("../controllers/todoController.js");
 
 const router = express.Router();
@@ -15,8 +17,8 @@ const router = express.Router();
 router.use(isLoggedIn)
 
 router.post("/",
-//   validationRules('createTodo'),
-//   validate,
+  validationRules('createTodo'),
+  validate,
   createTodo
 )
 
@@ -28,8 +30,16 @@ router.put("/:id",
 
 router.delete("/:id", deleteTodo)
 
+router.get("/", fetchAll)
+
 router.get("/:id", fetchTodo)
 
-router.get("/", fetchAll)
+router.post("/invite",
+  validationRules('inviteFriend'),
+  validate,
+  inviteFriend
+)
+
+router.get("/invites/:email", fetchFriendsTodos)
 
 module.exports = router;

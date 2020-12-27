@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema
 const { hashSync } = require('bcryptjs');
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     email: {
       type: String,
@@ -10,7 +11,9 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true
-    }
+    },
+    todos: [{ type: Schema.Types.ObjectId, ref: 'Todo' }],
+    invites: [{ type: String }]
   },
   {
     toJSON: {

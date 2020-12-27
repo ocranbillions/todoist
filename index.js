@@ -1,7 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 require('dotenv').config();
-// require("./initDB");
 
 const start = async () => {
   if (!process.env.MONGO_URI) {

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema
 
-const todoSchema = new mongoose.Schema(
+const todoSchema = new Schema(
   {
     title: {
       type: String,
@@ -13,7 +14,12 @@ const todoSchema = new mongoose.Schema(
     status: {
       type: String, enum: ["pending", "completed", "canceled"],
       required: true
-    }
+    },
+    created_at: {
+      type: Date,
+      required: true,
+    },
+    author: [{ type: Schema.Types.ObjectId, ref: 'User' }]
   },
   {
     toJSON: {

@@ -4,6 +4,7 @@ const generateToken = require("../utils/generateToken")
 
 const signUp = async (req, res) => {
   req.body.email = req.body.email.toLowerCase();
+  req.body.created_at = new Date();
   try {
     const existingUser = await User.findOne({ email: req.body.email });
 
@@ -49,7 +50,7 @@ const signIn = async (req, res) => {
 
     const token = generateToken({email: existingUser.email, id: existingUser._id});
 
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
       data: {token},
     })

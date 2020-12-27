@@ -24,7 +24,13 @@ const validationRules = (method) => {
         body('description')
           .trim()
           .isLength({ min: 5 })
-          .withMessage('Password must be at least 5 characters'),
+          .withMessage('description must be at least 5 characters'),
+      ]
+    case 'inviteFriend':
+      return [
+        body('email')
+          .isEmail()
+          .withMessage('Email must be valid')
       ]
   }
 }
