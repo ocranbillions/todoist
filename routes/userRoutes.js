@@ -1,18 +1,18 @@
 const express = require("express")
 const {signUp, signIn} = require("../controllers/userController.js");
-const userValidationRules = require("../middlewares/userValidationRules")
+const validationRules = require("../middlewares/validationRules")
 const validate = require("../middlewares/validate")
 
 const router = express.Router();
 
 router.post("/signup",
-  userValidationRules('signup'),
+  validationRules('signup'),
   validate,
   signUp
 )
 
 router.post("/signin",
-  userValidationRules('signin'),
+  validationRules('signin'),
   validate,
   signIn
 )

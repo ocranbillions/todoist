@@ -6,6 +6,7 @@ const app = require('../app')
 let mongo;
 beforeAll(async () => {
   process.env.JWT_SECRET = 'secret';
+  process.env.NODE_ENV = "test"
 
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();
@@ -29,10 +30,7 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-global.signin = async () => {
-  const email = 'test@test.com';
-  const password = 'password';
-
+global.signup = async (email, password) => {
   const response = await request(app)
     .post('/auth/signup')
     .send({
@@ -40,6 +38,7 @@ global.signin = async () => {
       password
     })
     .expect(201);
-
-  return response;
+  
+  const { token } = response.body.data;
+  return token;
 };

@@ -1,25 +1,45 @@
 const express = require("express")
+const validationRules = require("../middlewares/validationRules")
+const validate = require("../middlewares/validate")
+const isLoggedIn = require("../middlewares/authorization")
+const {
+  createTodo,
+  editTodo,
+  deleteTodo,
+  fetchTodo,
+  fetchAll,
+  inviteFriend,
+  fetchFriendsTodos
+} = require("../controllers/todoController.js");
 
 const router = express.Router();
 
-const db = [];
+router.use(isLoggedIn)
 
-router.get("/", (req, res) => {
+router.post("/",
+  validationRules('createTodo'),
+  validate,
+  createTodo
+)
 
-    
-    res.send("get todos")
-})
+router.put("/:id",
+//   validationRules('editTodo'),
+  validate,
+  editTodo
+)
 
-router.post("/todo", (req, res) => {
+router.delete("/:id", deleteTodo)
 
-})
+router.get("/", fetchAll)
 
-router.put("/todo", (req, res) => {
+router.get("/:id", fetchTodo)
 
-})
+router.post("/invite",
+  validationRules('inviteFriend'),
+  validate,
+  inviteFriend
+)
 
-router.delete("/todo", (req, res) => {
-
-})
+router.get("/invites/:email", fetchFriendsTodos)
 
 module.exports = router;

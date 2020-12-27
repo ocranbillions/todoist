@@ -18,7 +18,6 @@ app.all('*', (req, res) => {
 //Error handler
 app.use((error, req, res, next) => {
   const env = process.env.NODE_ENV;
-  // console.log(env, process.env.NODE_ENV, 'env')
   if (env === 'development' || env === 'test') {
     console.log(error.stack)
     return res.status(500).json({
