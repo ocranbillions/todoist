@@ -153,11 +153,11 @@ const inviteFriend = async (req, res) => {
     const message = {friendsEmail, ownersEmail: myEmail};
     const queue = "send_email";
     sendQueue(message, queue)
-      .then((responseFromRPC) => {
+      .then((data) => {
         return res.status(200).json({
           success: true,
           data: null,
-          message: responseFromRPC,
+          message: data,
         })
       })
 

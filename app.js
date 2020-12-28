@@ -2,12 +2,19 @@ const express = require("express");
 const bodyParser = require('body-parser')
 const todoRoutes = require("./routes/todoRoutes")
 const userRoutes = require("./routes/userRoutes")
-// require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json())
 app.use("/auth", userRoutes)
 app.use("/todo", todoRoutes)
+
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success:true,
+    message: "Welcome to Todoist"
+  })
+})
 
 app.all('*', (req, res) => {
   return res.status(404).json({
