@@ -1,6 +1,7 @@
 const { Todo } = require('../models/Todo');
 const { User } = require('../models/User');
 const { promisify } = require('util')
+const { sendQueue } = require('../utils/rabbitMQ')
 
 const createTodo = async (req, res) => {
   req.body.status = "pending";
@@ -149,15 +150,16 @@ const inviteFriend = async (req, res) => {
     me.invites.push(friendsEmail);
     await me.save();
 
-    // TODO: Send message queue with RabbitMQ
-    //
-    // 
-
-    return res.status(201).json({
-      success: true,
-      data: null,
-      message: `You have successfully invited ${friendsEmail} to view your todos an email will be sent to them shortly`
-    })
+    const message = {friendsEmail, ownersEmail: myEmail};
+    const queue = "send_email";
+    sendQueue(message, queue)
+      .then((responseFromRPC) => {
+        return res.status(200).json({
+          success: true,
+          data: null,
+          message: responseFromRPC,
+        })
+      })
 
   }catch(error) {
     return res.status(500).json({
