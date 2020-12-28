@@ -57,9 +57,9 @@ const deleteTodo = async (req, res) => {
     const todoBelongsToUser = user.todos.find(todoId => todoId.toString() === id)
 
     if(!todoBelongsToUser) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: "Todo not found"
+        message: "Unauthorized"
       })
     }
 
@@ -153,11 +153,10 @@ const inviteFriend = async (req, res) => {
     const message = {friendsEmail, ownersEmail: myEmail};
     const queue = "send_email";
     sendQueue(message, queue)
-      .then((data) => {
+      .then((msg) => {
         return res.status(200).json({
           success: true,
-          data: null,
-          message: data,
+          message: msg,
         })
       })
 
