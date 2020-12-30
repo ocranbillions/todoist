@@ -138,7 +138,7 @@ it('returns a 400 if update todo does not pass validation', async () => {
     })
   expect(res2.statusCode).toEqual(400)
   expect(res2.body).toHaveProperty('errors')
-  expect(res2.body.errors[0].status).toEqual("status must be 'candeled', 'deleted', OR 'pending'")
+  expect(res2.body.errors[0].status).toEqual("status must be 'canceled', 'deleted', OR 'pending'")
 });
 
 it('returns unauthorized on edit todo if todo doesn\'t belong to user', async () => {

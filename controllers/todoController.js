@@ -2,7 +2,7 @@ const { Todo } = require('../models/Todo');
 const { User } = require('../models/User');
 const { promisify } = require('util')
 const { sendQueue } = require('../utils/rabbitMQ')
-const awakeWorkerService = require("../utils/awakeWorkerService")
+const awakeWorkerService = require("../utils/awakeWorkerService");
 
 const createTodo = async (req, res) => {
   req.body.status = "pending";
@@ -33,7 +33,7 @@ const createTodo = async (req, res) => {
 
 const editTodo = async (req, res) => {
   const id = req.params.id;
-  const { title, description, status } = req.body;
+  const {  status } = req.body;
   
   try {
 
@@ -47,17 +47,20 @@ const editTodo = async (req, res) => {
       })
     }
 
-    const todo = await Todo.findOneAndUpdate({_id: id}, {
-      [title]: title, // update field if present
-      [description]: description,
-      status: status.toLowerCase()
-    },
+    const fields = {}
+    for(field in req.body) {
+      fields[field] = req.body[field]
+    }
+    fields.status = status.toLowerCase();
+
+    const todo = await Todo.findOneAndUpdate({_id: id}, fields,
      { new: true }
     );
 
     return res.status(200).json({
       success: true,
       data: todo,
+      fields
     })
 
   }catch(error) {
