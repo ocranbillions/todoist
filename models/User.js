@@ -14,16 +14,6 @@ const userSchema = new Schema(
     },
     todos: [{ type: Schema.Types.ObjectId, ref: 'Todo' }],
     invites: [{ type: String }]
-  },
-  {
-    toJSON: {
-      transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.password;
-        delete ret.__v;
-      }
-    }
   }
 );
 
