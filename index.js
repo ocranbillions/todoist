@@ -1,6 +1,7 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 require('dotenv').config();
+const keepAwake = require("./utils/heroku_awake")
 
 const start = async () => {
   if (!process.env.MONGO_URI) {
@@ -23,6 +24,7 @@ const start = async () => {
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Listening on port ${process.env.PORT}!!`);
+    keepAwake();
   });
 };
 
