@@ -23,7 +23,7 @@ router.post("/",
 )
 
 router.put("/:id",
-//   validationRules('editTodo'),
+  validationRules('editTodo'),
   validate,
   editTodo
 )

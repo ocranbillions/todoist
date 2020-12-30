@@ -31,12 +31,32 @@ const createTodo = async (req, res) => {
 
 
 const editTodo = async (req, res) => {
+  const id = req.params.id;
+  const { title, description, status } = req.body;
   
   try {
 
-    return res.status(201).json({
+    const user = await User.findOne({ email: req.user.email });
+    const todoBelongsToUser = user.todos.find(todoId => todoId.toString() === id)
+
+    if(!todoBelongsToUser) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized"
+      })
+    }
+
+    const todo = await Todo.findOneAndUpdate({_id: id}, {
+      [title]: title, // update field if present
+      [description]: description,
+      status: status.toLowerCase()
+    },
+     { new: true }
+    );
+
+    return res.status(200).json({
       success: true,
-      data: {},
+      data: todo,
     })
 
   }catch(error) {

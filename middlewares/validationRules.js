@@ -1,7 +1,8 @@
-const { body } = require('express-validator')
+const { body, check, checkSchema } = require('express-validator')
 // const {userSchema, User} = require("../models/User")
 
 const validationRules = (method) => {
+
   switch (method) {
     case 'signup': 
     case 'signin':
@@ -19,12 +20,36 @@ const validationRules = (method) => {
       return [
         body('title')
           .trim()
-          .isLength({ min: 2 })
-          .withMessage('Title must be at least 2 characters'),
+          .isLength({ min: 5 })
+          .withMessage('Title must be at least 5 characters'),
         body('description')
           .trim()
+          .isLength({ min: 10 })
+          .withMessage('description must be at least 10 characters'),
+      ]
+    case 'editTodo':
+      const Schema = {
+        "status": {
+          in: 'body',
+          matches: {
+            options: [/\b(?:canceled|completed|pending)\b/],
+            errorMessage: "status must be 'candeled', 'deleted', OR 'pending'"
+          }
+        }
+      }
+      return [
+        body('title')
+          .optional()
+          .trim()
           .isLength({ min: 5 })
-          .withMessage('description must be at least 5 characters'),
+          .withMessage('Title must be at least 5 characters'),
+        body('description')
+          .optional()
+          .trim()
+          .isLength({ min: 10 })
+          .withMessage('description must be at least 10 characters'),
+        checkSchema(Schema),
+        
       ]
     case 'inviteFriend':
       return [
