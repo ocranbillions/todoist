@@ -2,6 +2,7 @@ const { Todo } = require('../models/Todo');
 const { User } = require('../models/User');
 const { promisify } = require('util')
 const { sendQueue } = require('../utils/rabbitMQ')
+const awakeWorkerService = require("../utils/awakeWorkerService")
 
 const createTodo = async (req, res) => {
   req.body.status = "pending";
@@ -172,6 +173,10 @@ const inviteFriend = async (req, res) => {
 
     const message = {friendsEmail, ownersEmail: myEmail};
     const queue = "send_email";
+
+    if(process.env.NODE_ENV === "development") {
+      await awakeWorkerService()
+    }
     sendQueue(message, queue)
       .then((msg) => {
         return res.status(200).json({
