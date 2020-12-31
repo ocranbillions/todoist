@@ -1,6 +1,7 @@
 const amqp = require('amqplib/callback_api');
 const url = process.env.CLOUDAMQP_URL;
 
+/* istanbul ignore next */
 module.exports.sendQueue = (message, queue) => {
   return new Promise(async (resolve) => {
   amqp.connect(url, function(error0, connection) {
