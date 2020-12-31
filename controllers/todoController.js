@@ -3,7 +3,7 @@ const { User } = require('../models/User');
 const { promisify } = require('util')
 const { sendQueue } = require('../utils/rabbitMQ')
 
-const createTodo = async (req, res) => {
+const createTodo = async (req, res, next) => {
   req.body.status = "pending";
   req.body.created_at = new Date();
   try {
@@ -21,16 +21,11 @@ const createTodo = async (req, res) => {
       data: record
     })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
+  }catch(error) { next(error) }
 }
 
 
-const editTodo = async (req, res) => {
+const editTodo = async (req, res, next) => {
   const id = req.params.id;
   const {  status } = req.body;
   
@@ -62,16 +57,11 @@ const editTodo = async (req, res) => {
       fields
     })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
+  }catch(error) { next(error) }
 }
 
 
-const deleteTodo = async (req, res) => {
+const deleteTodo = async (req, res, next) => {
   const id = req.params.id;
   try {
 
@@ -95,15 +85,10 @@ const deleteTodo = async (req, res) => {
       message: `Todo ID: ${id} has been deleted`,
     })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
+  }catch(error) { next(error) }
 }
 
-const fetchTodo = async (req, res) => {
+const fetchTodo = async (req, res, next) => {
   const id = req.params.id
   try {
 
@@ -120,21 +105,16 @@ const fetchTodo = async (req, res) => {
     
     const todo = await Todo.findOne({ _id: id });
 
-    return res.status(200).json({
-      success: true,
+    return res.status(todo ? 200 : 404).json({
+      success: todo ? true : false,
       data: todo,
     })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
+  }catch(error) { next(error) }
 }
 
 
-const fetchAll = async (req, res) => {
+const fetchAll = async (req, res, next) => {
   try {
 
     const email =  req.user.email;
@@ -147,16 +127,11 @@ const fetchAll = async (req, res) => {
       data: todos,
     })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
+  }catch(error) { next(error) }
 }
 
 
-const inviteFriend = async (req, res) => {
+const inviteFriend = async (req, res, next) => {
   try {
     const friendsEmail = req.body.email;
 
@@ -184,16 +159,11 @@ const inviteFriend = async (req, res) => {
         })
       })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
+  }catch(error) { next(error) }
 }
 
 
-const fetchFriendsTodos = async (req, res) => {
+const fetchFriendsTodos = async (req, res, next) => {
   const friendsEmail = req.params.email;
   const myEmail = req.user.email;
   try{
@@ -221,12 +191,7 @@ const fetchFriendsTodos = async (req, res) => {
       message: `You have not been invited to view ${friendsEmail}'s todos`,
     })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
+  }catch(error) { next(error) }
 }
 
 module.exports = {

@@ -2,7 +2,7 @@ const { compareSync } = require('bcryptjs');
 const {User} = require('../models/User');
 const generateToken = require("../utils/generateToken")
 
-const signUp = async (req, res) => {
+const signUp = async (req, res, next) => {
   req.body.email = req.body.email.toLowerCase();
   req.body.created_at = new Date();
   try {
@@ -25,16 +25,10 @@ const signUp = async (req, res) => {
       data: {token},
     })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-    // throw new Error(error.message)
-  }
+  }catch(error) { next(error) }
 }
 
-const signIn = async (req, res) => {
+const signIn = async (req, res, next) => {
   req.body.email = req.body.email.toLowerCase();
   const {email, password} = req.body;
   try {
@@ -55,12 +49,7 @@ const signIn = async (req, res) => {
       data: {token},
     })
 
-  }catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
+  }catch(error) { next(error) }
 }
 
 module.exports = {
