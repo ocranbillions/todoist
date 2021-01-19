@@ -17,10 +17,10 @@ app.use(
       if (!err.originalError) {
         return err;
       }
-      const data = err.originalError.data;
+      const errors = err.originalError.errors;
       const message = err.message || 'An error occurred.';
       const code = err.originalError.code || 500;
-      return { message: message, status: code, data: data };
+      return { message: message, status: code, errors: errors };
     }
   })
 );

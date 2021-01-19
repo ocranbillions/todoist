@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node graphql_api/index.js",
-    "dev": "nodemon graphql_api/index.js",
+    "start": "node /index.js",
+    "dev": "nodemon /index.js",
     "test": "jest --coverage --testTimeout=10000",
     "coverage": "coveralls < coverage/lcov.info"
   },
@@ -38,6 +38,7 @@
     "express-validator": "^6.9.0",
     "graphql": "^15.4.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.8"
+    "mongoose": "^5.11.8",
+    "validator": "^13.5.2"
   }
 }
