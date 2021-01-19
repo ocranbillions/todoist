@@ -14,7 +14,8 @@ const userSchema = new Schema(
     },
     todos: [{ type: Schema.Types.ObjectId, ref: 'Todo' }],
     invites: [{ type: String }]
-  }
+  },
+  { timestamps: true }
 );
 
 userSchema.pre('save', async function(done) {
@@ -25,12 +26,6 @@ userSchema.pre('save', async function(done) {
   done();
 });
 
-// userSchema.statics.findByEmail = function (email) {
-//   return this.find({ email: email })
-//           .then(result => {
-//             if (result) throw new Error('Email already exist!')
-//         })
-// }
 
 const User = mongoose.model('User', userSchema);
 

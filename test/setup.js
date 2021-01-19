@@ -1,7 +1,7 @@
 const { MongoMemoryServer } = require('mongodb-memory-server')
 const mongoose = require('mongoose')
 const request = require('supertest')
-const app = require('../graphql_api/app')
+const app = require('../app')
 
 let mongo;
 beforeAll(async () => {
@@ -30,15 +30,15 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-global.signup = async (email, password) => {
-  const response = await request(app)
-    .post('/auth/signup')
-    .send({
-      email,
-      password
-    })
-    .expect(201);
+// global.signup = async (email, password) => {
+//   const response = await request(app)
+//     .post('/auth/signup')
+//     .send({
+//       email,
+//       password
+//     })
+//     .expect(201);
   
-  const { token } = response.body.data;
-  return token;
-};
+//   const { token } = response.body.data;
+//   return token;
+// };
