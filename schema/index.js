@@ -6,6 +6,8 @@ const schema = buildSchema(`
     title: String!
     description: String!
     status: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
   type Todos{

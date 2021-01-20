@@ -1,17 +1,21 @@
 const express = require("express");
 const { graphqlHTTP } = require('express-graphql');
-const graphqlSchema = require('./schema');
-const graphqlResolver = require('./resolvers');
+const schema = require('./schema');
+const resolver = require('./resolvers');
 const bodyParser = require('body-parser');
+const auth = require("./middlewares/authorization")
 
 const app = express();
+
 app.use(bodyParser.json())
+
+app.use(auth)
 
 app.use(
   '/graphql',
   graphqlHTTP({
-    schema: graphqlSchema,
-    rootValue: graphqlResolver,
+    schema,
+    rootValue: resolver,
     graphiql: true,
     formatError(err) {
       if (!err.originalError) {

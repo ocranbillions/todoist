@@ -30,15 +30,25 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-// global.signup = async (email, password) => {
-//   const response = await request(app)
-//     .post('/auth/signup')
-//     .send({
-//       email,
-//       password
-//     })
-//     .expect(201);
+global.signup = async (email, password) => {
+  const signUpQuery = {
+    query: `
+      mutation RegisterUser($email: String!, $password: String!) {
+        signUp(userData: {email: $email, password: $password}) {
+          token
+        }
+      }
+    `,
+    variables: {
+      email,
+      password
+    }
+  };
+
+  const response = await request(app)
+    .post('/graphql')
+    .send(signUpQuery)
   
-//   const { token } = response.body.data;
-//   return token;
-// };
+  const { token } = response.body.data.signUp;
+  return token;
+};
