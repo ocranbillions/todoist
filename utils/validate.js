@@ -56,7 +56,7 @@ module.exports = function (resolver, data){
 
     case 'objectID':
       if(!validator.isMongoId(data.id)) {
-        errors.push({ message: 'Provide a valid mongoose objectID' });
+        errors.push({ message: 'Invalid mongoose ObjectID' });
       }
       if (errors.length > 0) throw new CustomError("Invalid input!", 400, errors)
   }

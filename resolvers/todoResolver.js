@@ -2,6 +2,7 @@ const { Todo } = require('../models/Todo');
 const CustomError  = require("../utils/CustomError");
 const { User } = require('../models/User');
 const validate = require("../utils/validate");
+const { sendQueue } = require('../utils/rabbitMQ')
 
 
 module.exports.createTodo = async function({ todoInput }, req) {
@@ -139,6 +140,9 @@ module.exports.deleteTodo = async function({ id }, req) {
   return true;
 }
 
-// module.exports.inviteFriend = async function(args, req) {}
 
-// module.exports.fetchFriendsTodos = async function(args, req) {}
+// module.exports.inviteFriend = async function({}, req){ }
+
+
+// module.exports.fetchFriendsTodos = async function({}, req){}
+

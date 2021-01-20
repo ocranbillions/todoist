@@ -24,7 +24,11 @@ app.use(
       const errors = err.originalError.errors;
       const message = err.message || 'An error occurred.';
       const code = err.originalError.code || 500;
-      return { message: message, status: code, errors: errors };
+      // return { message: message, status: code, errors: errors };
+
+      const locations = err.locations;
+      const path = err.path;
+      return { message: message, status: code, errors, locations, path };
     }
   })
 );
