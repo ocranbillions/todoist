@@ -32,7 +32,7 @@ const validationRules = (method) => {
         "status": {
           in: 'body',
           matches: {
-            options: [/\b(?:canceled|completed|pending)\b/],
+            options: [/\b(?:completed|pending)\b/],
             errorMessage: "status must be 'canceled', 'deleted', OR 'pending'"
           }
         }
