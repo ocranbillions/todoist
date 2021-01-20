@@ -30,7 +30,7 @@ module.exports.signIn = async ({ userData }, req) => {
   const user = await User.findOne({ email });
 
   if (!user || (!compareSync(password, user.password))) 
-    throw new CustomError("Wrong login credentials", 400)
+    throw new CustomError("Wrong login credentials", 401)
 
   const token = generateToken({email, id: user._id});
 

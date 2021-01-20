@@ -17,7 +17,7 @@ module.exports = function (resolver, data){
       ) {
         errors.push({ message: 'Password too short!' });
       }
-      if (errors.length > 0) throw new CustomError("Invalid input!", 422, errors)
+      if (errors.length > 0) throw new CustomError("Invalid input!", 400, errors)
       return;
     // case 'createTodo':
 
