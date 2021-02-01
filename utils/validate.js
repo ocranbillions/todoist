@@ -59,5 +59,12 @@ module.exports = function (resolver, data){
         errors.push({ message: 'Invalid mongoose ObjectID' });
       }
       if (errors.length > 0) throw new CustomError("Invalid input!", 400, errors)
+      return;
+    
+    case 'email':
+      if (!validator.isEmail(data.email)) {
+        errors.push({ message: 'Email is invalid.' });
+      }
+      if (errors.length > 0) throw new CustomError("Invalid input!", 400, errors)
   }
 }
