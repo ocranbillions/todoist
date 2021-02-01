@@ -48,7 +48,7 @@ describe("TEST TODO CREATION", () => {
       .set('Authorization', "invalid-token-here")
       .send(createTodoQuery)
 
-    expect(res.body.errors[0].message).toEqual("Please proide a valid token!")
+    expect(res.body.errors[0].message).toEqual("Your session expired. Sign in again!")
     expect(res.body.errors[0].status).toEqual(401)
 
   });
@@ -102,7 +102,7 @@ describe("TEST FETCHING SINGLE TODO BELONGING TO A USER", () => {
       .set('Authorization', "invalid-token-here")
       .send(fetchTodoQuery)
 
-    expect(res.body.errors[0].message).toEqual("Please proide a valid token!")
+    expect(res.body.errors[0].message).toEqual("Your session expired. Sign in again!")
     expect(res.body.errors[0].status).toEqual(401)
   });
 
@@ -254,7 +254,7 @@ describe("TEST FETCHING SINGLE TODO BELONGING TO A USER", () => {
 
 })
 
-describe("TEST FETCHING ALL TODOS ALL TODOS", () => {
+describe("TEST FETCHING ALL TODOS", () => {
   it('Should fetch todos for logged in user', async () => {
     const token = await global.signup("samm@gmail.com", "pass12345")
   
@@ -344,7 +344,7 @@ describe("TEST USER's TODO UPDATE", () => {
       .set('Authorization', "invalid-token-here")
       .send(updateTodoQuery)
 
-    expect(resp.body.errors[0].message).toEqual("Please proide a valid token!")
+    expect(resp.body.errors[0].message).toEqual("Your session expired. Sign in again!")
     expect(resp.body.errors[0].status).toEqual(401)
   });
 
@@ -511,7 +511,7 @@ describe("DELETING TODO'S BY OWNER", () => {
       .set('Authorization', "invalid-token-here")
       .send(deleteTodoQuery)
 
-    expect(res.body.errors[0].message).toEqual("Please proide a valid token!")
+    expect(res.body.errors[0].message).toEqual("Your session expired. Sign in again!")
     expect(res.body.errors[0].status).toEqual(401)
   });
 

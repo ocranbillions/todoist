@@ -6,7 +6,7 @@ const { sendQueue } = require('../utils/rabbitMQ')
 
 
 module.exports.createTodo = async function({ todoInput }, req) {
-  if(!req.isAuth) throw new CustomError("Please proide a valid token!", 401)
+  if(!req.isAuth) throw new CustomError("Your session expired. Sign in again!", 401)
   
   validate("createTodo", todoInput)
 
@@ -32,7 +32,7 @@ module.exports.createTodo = async function({ todoInput }, req) {
 
 
 module.exports.fetchTodo = async function({ id }, req) {
-  if(!req.isAuth) throw new CustomError("Please proide a valid token!", 401)
+  if(!req.isAuth) throw new CustomError("Your session expired. Sign in again!", 401)
 
   validate("objectID", {id})
 
@@ -58,7 +58,7 @@ module.exports.fetchTodo = async function({ id }, req) {
 
 
 module.exports.fetchTodos = async function(args, req) {
-  if(!req.isAuth) throw new CustomError("Please proide a valid token!", 401)
+  if(!req.isAuth) throw new CustomError("Your session expired. Sign in again!", 401)
 
   const user = await User.findOne({ email: req.user.email });
 
@@ -84,7 +84,7 @@ module.exports.fetchTodos = async function(args, req) {
 
 
 module.exports.updateTodo = async function({ id, todoInput }, req) {
-  if(!req.isAuth) throw new CustomError("Please proide a valid token!", 401)
+  if(!req.isAuth) throw new CustomError("Your session expired. Sign in again!", 401)
 
   validate("todoUpdate", {id, ...todoInput})
 
@@ -117,7 +117,7 @@ module.exports.updateTodo = async function({ id, todoInput }, req) {
 
 
 module.exports.deleteTodo = async function({ id }, req) {
-  if(!req.isAuth) throw new CustomError("Please proide a valid token!", 401)
+  if(!req.isAuth) throw new CustomError("Your session expired. Sign in again!", 401)
 
   validate("objectID", {id})
 
@@ -141,8 +141,61 @@ module.exports.deleteTodo = async function({ id }, req) {
 }
 
 
-// module.exports.inviteFriend = async function({}, req){ }
+module.exports.inviteFriend = async function({ friendsEmail }, req){
+  if(!req.isAuth) throw new CustomError("Your session expired. Sign in again!", 401)
+
+  validate("email", {email: friendsEmail})
+
+  const friend = await User.findOne({ email: friendsEmail });
+  
+  if(!friend) throw new CustomError("User not found!", 404)
+  
+  const myEmail = req.user.email;
+  const me = await User.findOne({ email: myEmail });
+
+  me.invites.push(friendsEmail);
+  await me.save();
+
+  const message = {friendsEmail, ownersEmail: myEmail};
+  const queue = "send_email";
+
+  return sendQueue(message, queue).then(message => message)
+}
 
 
-// module.exports.fetchFriendsTodos = async function({}, req){}
+module.exports.fetchFriendsTodos = async function({ friendsEmail }, req){
+  if(!req.isAuth) throw new CustomError("Your session expired. Sign in again!", 401)
+
+  const myEmail = req.user.email;
+
+  const friend = await User.findOne({ email: friendsEmail });
+  
+  if(!friend) throw new CustomError(`The user with the email: ${friendsEmail} does not exist`, 404)
+  
+  const friendsInvites = Array.from(friend.invites);
+
+  if(friendsInvites.includes(myEmail)) {
+    const friendsTodos = await Todo.find({ author: friend._id });
+    const totalTodos = await Todo.find({ author: friend._id }).countDocuments();
+
+    return {
+      isInvited: true,
+      totalTodos,
+      todos: friendsTodos.map(todo => {
+        return {
+          ...todo._doc,
+          id: todo._id.toString(),
+          createdAt: todo.createdAt.toISOString(),
+          updatedAt: todo.updatedAt.toISOString()
+        };
+      }),
+    };
+  }
+
+  return {
+    isInvited: false,
+    totalTodos: 0,
+    todos: []
+  }
+}
 
